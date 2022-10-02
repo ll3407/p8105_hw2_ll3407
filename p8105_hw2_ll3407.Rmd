@@ -6,11 +6,17 @@ date: "2022-10-02"
 
 ## Problem 1
 Read and clean the data
-```{r}
+```{r, echo=FALSE}
 library(tidyverse)
 NYC_transit = read_csv(file = './data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv') %>% 
-janitor::clean_names() %>% 
-  skimr::skim()
+janitor::clean_names() 
+```
+
+Retain line, station,name, station latitude / longitude, routes served, entry, vending, entrance type, and ADA compliance
+
+```{r}
+select(NYC_transit,line:entry, vending, ada)
+
 
 ```
 
