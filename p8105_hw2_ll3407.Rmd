@@ -69,9 +69,41 @@ table(NYC_route$route_name)
 ```
 * There are 273 distinct stations serve the A train.
 
-```{r}
+```{r,eval=FALSE}
 A_ada=filter(NYC_route,route_name =="A" & ada == "TRUE")
 view(A_ada)
 ```
 * Of the stations that serve the A train, there are 107 ADA compliant.
+
+##Problem 2
+*Read and clean Mr.Trash Wheel dataset
+```{r}
+MTW_data = 
+  readxl::read_excel('./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx', sheet = 'Mr. Trash Wheel', range = "A2:N535") %>% 
+  janitor::clean_names() %>% 
+  tidyr::drop_na(dumpster) %>% 
+  mutate(sports_balls = as.integer((sports_balls),length=0)) %>% 
+  mutate(type="Mr")
+
+```
+
+*Read and clean Mr.Trash Wheel dataset
+```{r}
+PTW_data = 
+  readxl::read_excel('./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx', sheet = 'Professor Trash Wheel', range = "A2:N117") %>% 
+  janitor::clean_names() %>% 
+  tidyr::drop_na(dumpster) %>% 
+  mutate(sports_balls = as.integer((sports_balls),length=0)) %>% 
+  mutate(type = "Professor") %>% 
+  mutate(dumpster = as.character(dumpster))
+   
+```
+
+* a single tidy data
+```{r}
+single_tidy = 
+  bind_rows(MTW_data,PTW_data)
+```
+*_The combined data 'single_tidy' has 525 observations and 15 variables, including dumpster, month, year, date, weight_tons, volume_cubic_yards, plastic_bottles, polystyrene, cigarette_butts, glass_bottles, grocery_bags, chip_bags, sports_balls, homes_powered, and type_  
+*_The total weight of trash collected by Professor Trash Wheel is `r sum(PTW_data$weight_tons)`_
 
