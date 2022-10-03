@@ -10,13 +10,42 @@ Read and clean the data
 library(tidyverse)
 NYC_transit = read_csv(file = './data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv') %>% 
 janitor::clean_names() 
+view(NYC_transit)
+names(NYC_transit)
 ```
 
 Retain line, station,name, station latitude / longitude, routes served, entry, vending, entrance type, and ADA compliance
 
-```{r}
-select(NYC_transit,line:entry, vending, ada)
 
+```{r}
+NYC_clean = select(NYC_transit,line,station_name,station_latitude,station_longitude,route1:route11, entrance_type, entry, vending, ada)
 
 ```
 
+Convert entry variable from character to a logical variable
+```{r}
+NYC_clean$entry <-NYC_clean$entry %>% 
+plyr::revalue(c("YES"=TRUE,"NO"=FALSE))
+```
+Description of dataset:  
+* The original data 'NYC_Transit_Subway_Entrance_And_Exit_Data.csv' contains 32 variables, including `r names(NYC_transit)`  
+* We clean the name of the dataframe, retain variables into the new dataframe 'NYC_clean' including line, station,name, station latitude / longitude, routes served, entry, vending, entrance type, and ADA compliance  
+* There are 1,868 rows x 19 columns in data 'NYC_clean'. Those data are not tidy.
+
+Stations distinct
+```{r}
+distinct(NYC_clean, station_name, .keep_all = FALSE)
+
+```
+* There are 356 distinct stations.
+
+```{r}
+table(NYC_clean$ada)
+```
+
+* 468 stations are ADA compliant.
+```{r}
+table(NYC_clean$vending)
+```
+
+* The proportion of station entrances/exits without vending allow entrance is `r 100*(183/(183+1685))`%
