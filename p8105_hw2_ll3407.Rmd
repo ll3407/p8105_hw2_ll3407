@@ -103,7 +103,26 @@ PTW_data =
 ```{r}
 single_tidy = 
   bind_rows(MTW_data,PTW_data)
+
+sum(PTW_data$weight_tons)
+
+MTW2020=filter(MTW_data,year=='2020')
+sum(MTW2020$sports_balls)
 ```
-*_The combined data 'single_tidy' has 525 observations and 15 variables, including dumpster, month, year, date, weight_tons, volume_cubic_yards, plastic_bottles, polystyrene, cigarette_butts, glass_bottles, grocery_bags, chip_bags, sports_balls, homes_powered, and type_  
-*_The total weight of trash collected by Professor Trash Wheel is `r sum(PTW_data$weight_tons)`_
+*_The combined data 'single_tidy' has 525 observations and 15 variables, including dumpster, month, year, date, weight_tons, volume_cubic_yards, plastic_bottles, polystyrene, cigarette_butts, glass_bottles, grocery_bags, chip_bags, sports_balls, homes_powered, and type._  
+*_The total weight of trash collected by Professor Trash Wheel is 135.5 tons._  
+*_The total number of sports balls collected by Mr. Trash Wheel in 2020 is 856._
+
+## Problem 3
+clean data pols-month.csv
+
+```{r eval=FALSE}
+library(tidyverse)
+polsmonth = read_csv(file = './data/Fivethirtyeight/pols-month.csv') %>% 
+  separate(mon, sep="-", into = c("year","month","day")) 
+  mutate(month = recode(month, "1" = "January"),
+         month = factor(month))
+       
+
+```'
 
