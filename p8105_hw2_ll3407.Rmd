@@ -117,12 +117,32 @@ sum(MTW2020$sports_balls)
 clean data pols-month.csv
 
 ```{r eval=FALSE}
+
 library(tidyverse)
 polsmonth = read_csv(file = './data/Fivethirtyeight/pols-month.csv') %>% 
-  separate(mon, sep="-", into = c("year","month","day")) 
-  mutate(month = recode(month, "1" = "January"),
-         month = factor(month))
-       
+  janitor::clean_names() %>% 
+  separate(mon, sep="-", into = c("year","month","day")) %>% 
+  mutate(month = recode(month, "01" = "January", "02" = "February", "03" = "March", "04" = "April", "05" = "May", "06" = "June", "07" = "July", "08" = "August", "09" = "September", "10" = "October", "11" = "November", "12" = "December"),
+         month = factor(month)) %>% 
+  pivot_longer(prez_gop|prez_dem,
+               names_to = 'president',
+               names_prefix = 'prez_') %>% 
+  select(-day)
+  
 
-```'
+```
+
+Clean data snp.csv
+```{r eval=FALSE}
+snp = read_csv(file = './data/Fivethirtyeight/snp.csv',
+               col_types = 'ccddiiii')%>% 
+  janitor::clean_names()%>% 
+  separate(date, sep="/", into = c("month","day","year")) %>% 
+  mutate(month = recode(month, "1" = "January", "2" = "February", "3" = "March", "4" = "April", "5" = "May", "6" = "June", "7" = "July", "8" = "August", "9" = "September", "10" = "October", "11" = "November", "12" = "December")) %>% 
+  relocate(year,month)
+ 
+```
+
+
+
 
